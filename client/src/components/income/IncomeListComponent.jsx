@@ -5,7 +5,7 @@ import {
   updateIncome,
   deleteIncome,
   getCategories,
-} from "../api/apiEndpoint";
+} from "../../api/apiEndpoint";
 
 const IncomeList = () => {
   const [incomes, setIncomes] = useState([]);
@@ -49,57 +49,6 @@ const IncomeList = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Incomes</h2>
-      <div className="flex space-x-2 mb-4">
-        <input
-          type="text"
-          value={newIncome.amount}
-          onChange={(e) =>
-            setNewIncome({ ...newIncome, amount: e.target.value })
-          }
-          placeholder="Amount"
-          className="border p-2"
-        />
-        <input
-          type="text"
-          value={newIncome.description}
-          onChange={(e) =>
-            setNewIncome({ ...newIncome, description: e.target.value })
-          }
-          placeholder="Description"
-          className="border p-2"
-        />
-        <input
-          type="date"
-          value={newIncome.income_date}
-          onChange={(e) =>
-            setNewIncome({ ...newIncome, income_date: e.target.value })
-          }
-          className="border p-2"
-        />
-        <select
-          value={newIncome.category_id}
-          onChange={(e) =>
-            setNewIncome({ ...newIncome, category_id: e.target.value })
-          }
-          className="border p-2"
-        >
-          <option value="">Select Category</option>
-          {categories
-            .filter((category) => category.type === "income") // Filter categories by type
-            .map((category) => (
-              <option key={category._id} value={category._id}>
-                {category.name}
-              </option>
-            ))}
-        </select>
-        <button
-          onClick={handleCreateIncome}
-          className="bg-blue-600 text-white p-2"
-        >
-          Add Income
-        </button>
-      </div>
       <ul>
         {incomes.map((income) => (
           <li

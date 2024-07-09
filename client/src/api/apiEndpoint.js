@@ -1,25 +1,22 @@
-import axios from "axios";
+import { createData, deleteData, getAllData, getData, updateData } from "../utils/apiUtils";
 
-const API_URL = "http://localhost:5000/api";
-
-export const getCategories = () => axios.get(`${API_URL}/categories`);
-export const createCategory = (category) =>
-  axios.post(`${API_URL}/categories`, category);
+export const getCategories = () => getAllData("/categories");
+export const getCategory = (id) => getData("/categories/", id);
+export const createCategory = (category) => createData("/categories", category);
 export const updateCategory = (id, category) =>
-  axios.put(`${API_URL}/categories/${id}`, category);
-export const deleteCategory = (id) =>
-  axios.delete(`${API_URL}/categories/${id}`);
+  updateData("/categories", id, category);
+export const deleteCategory = (id) => deleteData("/categories", id);
 
-export const getExpenses = () => axios.get(`${API_URL}/expenses`);
-export const createExpense = (expense) =>
-  axios.post(`${API_URL}/expenses`, expense);
+export const getExpenses = () => getAllData("/expenses");
+export const getExpense = (id) => getData("/expenses/", id);
+export const createExpense = (expense) => createData("/expenses", expense);
 export const updateExpense = (id, expense) =>
-  axios.put(`${API_URL}/expenses/${id}`, expense);
-export const deleteExpense = (id) => axios.delete(`${API_URL}/expenses/${id}`);
+  updateData("/expenses", id, category);
+export const deleteExpense = (id) => deleteData("/expenses", id);
 
-export const getIncomes = () => axios.get(`${API_URL}/incomes`);
-export const createIncome = (income) =>
-  axios.post(`${API_URL}/incomes`, income);
+export const getIncomes = () => getAllData("/incomes");
+export const getIncome = (id) => getData("/incomes/", id);
+export const createIncome = (income) => createData("/incomes", income);
 export const updateIncome = (id, income) =>
-  axios.put(`${API_URL}/incomes/${id}`, income);
-export const deleteIncome = (id) => axios.delete(`${API_URL}/incomes/${id}`);
+  updateData("/incomes", id, category);
+export const deleteIncome = (id) => deleteData("/incomes", id);
