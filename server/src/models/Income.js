@@ -8,7 +8,7 @@ const incomeSchema = new mongoose.Schema({
   },
   amount: { type: Number, required: true },
   description: { type: String },
-  income_date: { type: Date, required: true },
+  date: { type: Date, required: true },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
 });

@@ -14,12 +14,40 @@ router.post("/", async (req, res) => {
 });
 
 // Get all categories
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const categories = await Category.find();
     res.status(200).json(categories);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Get categories with pagination
+router.get("/", async (req, res) => {
+  const {
+    page = 1,
+    limit = 10,
+    sortField = "created_at",
+    sortOrder = "asc",
+  } = req.query;
+
+  try {
+    const categories = await Category.find()
+      .sort({ [sortField]: sortOrder === "asc" ? 1 : -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    const count = await Category.countDocuments();
+
+    res.json({
+      categories,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 

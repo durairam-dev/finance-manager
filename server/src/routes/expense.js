@@ -14,12 +14,41 @@ router.post("/", async (req, res) => {
 });
 
 // Get all expenses
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const expenses = await Expense.find().populate("category_id");
     res.status(200).json(expenses);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Get expenses with pagination
+router.get("/", async (req, res) => {
+  const {
+    page = 1,
+    limit = 10,
+    sortField = "date",
+    sortOrder = "asc",
+  } = req.query;
+
+  try {
+    const expenses = await Expense.find()
+      .populate("category_id", "name")
+      .sort({ [sortField]: sortOrder === "asc" ? 1 : -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    const count = await Expense.countDocuments();
+
+    res.json({
+      expenses,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 

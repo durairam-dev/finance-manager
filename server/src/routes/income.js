@@ -14,12 +14,41 @@ router.post("/", async (req, res) => {
 });
 
 // Get all incomes
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const incomes = await Income.find().populate("category_id");
     res.status(200).json(incomes);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Get incomes with pagination
+router.get("/", async (req, res) => {
+  const {
+    page = 1,
+    limit = 10,
+    sortField = "date",
+    sortOrder = "asc",
+  } = req.query;
+
+  try {
+    const incomes = await Income.find()
+      .populate("category_id", "name")
+      .sort({ [sortField]: sortOrder === "asc" ? 1 : -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    const count = await Income.countDocuments();
+
+    res.json({
+      incomes,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 

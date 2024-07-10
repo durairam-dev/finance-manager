@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
+import { IoClose } from "react-icons/io5";
 import {
   createExpense,
-  updateExpense,
-  getCategories,
+  getAllCategories,
   getExpense,
+  updateExpense,
 } from "../../api/apiEndpoint";
-import { IoClose } from "react-icons/io5";
 
 const Form = ({ onClose, expenseId }) => {
   const [expense, setExpense] = useState({
     category_id: "",
     amount: "",
     description: "",
-    expense_date: "",
+    date: "",
   });
   const [categories, setCategories] = useState([]); // State for categories
 
@@ -21,25 +21,23 @@ const Form = ({ onClose, expenseId }) => {
     const formattedDate = today.toISOString().split("T")[0]; // Format the date to YYYY-MM-DD
     expenseId
       ? handleGetExpense(expenseId)
-      : setExpense({ ...expense, expense_date: formattedDate });
+      : setExpense({ ...expense, date: formattedDate });
     fetchCategories();
   }, []);
 
   const fetchCategories = async () => {
-    const response = await getCategories(); // Fetch categories from API
+    const response = await getAllCategories(); // Fetch categories from API
     setCategories(response);
   };
 
   const handleGetExpense = async (id) => {
     const editExpense = await getExpense(id);
-    console.log(editExpense);
     setExpense({
       category_id: editExpense.category_id._id,
       amount: editExpense.amount,
       description: editExpense.description,
-      expense_date: editExpense.expense_date.split("T")[0],
+      date: editExpense.date.split("T")[0],
     });
-    console.log(expense);
   };
 
   const handleSaveExpense = async () => {
@@ -53,7 +51,7 @@ const Form = ({ onClose, expenseId }) => {
     fetchExpenses();
   };
 
-  const handleUpdateExpense = async (id) => {
+  const handleUpdateExpense = async (id, expense) => {
     await updateExpense(id, expense);
     fetchExpenses();
   };
@@ -95,10 +93,8 @@ const Form = ({ onClose, expenseId }) => {
             <input
               type="date"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              value={expense.expense_date}
-              onChange={(e) =>
-                setExpense({ ...expense, expense_date: e.target.value })
-              }
+              value={expense.date}
+              onChange={(e) => setExpense({ ...expense, date: e.target.value })}
             />
           </div>
           <div className="mb-4">

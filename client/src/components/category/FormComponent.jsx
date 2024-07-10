@@ -29,7 +29,7 @@ const Modal = ({ onClose, categoryId }) => {
     fetchCategories();
   };
 
-  const handleUpdateCategory = async (id) => {
+  const handleUpdateCategory = async (id, category) => {
     await updateCategory(id, category);
     fetchCategories();
   };

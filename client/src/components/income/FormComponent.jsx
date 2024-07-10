@@ -1,45 +1,60 @@
 import { useEffect, useState } from "react";
-import {
-  getIncomes,
-  createIncome,
-  updateIncome,
-  deleteIncome,
-  getCategories,
-} from "../../api/apiEndpoint";
 import { IoClose } from "react-icons/io5";
+import {
+  createIncome,
+  getAllCategories,
+  getIncome,
+  updateIncome,
+} from "../../api/apiEndpoint";
 
-const Form = ({ isOpen, onClose }) => {
-  const [newIncome, setNewIncome] = useState({
+const Form = ({ onClose, incomeId }) => {
+  const [income, setIncome] = useState({
     category_id: "",
     amount: "",
     description: "",
-    income_date: "",
+    date: "",
   });
   const [categories, setCategories] = useState([]); // State for categories
 
   useEffect(() => {
     const today = new Date();
     const formattedDate = today.toISOString().split("T")[0]; // Format the date to YYYY-MM-DD
-    setNewIncome({ ...newIncome, income_date: formattedDate });
-    fetchCategories(); // Fetch categories on component mount
+    incomeId
+      ? handleGetIncome(incomeId)
+      : setIncome({ ...income, date: formattedDate });
+    fetchCategories();
   }, []);
 
   const fetchCategories = async () => {
-    const response = await getCategories(); // Fetch categories from API
-    setCategories(response.data);
+    const response = await getAllCategories(); // Fetch categories from API
+    setCategories(response);
+  };
+
+  const handleGetIncome = async (id) => {
+    const editIncome = await getIncome(id);
+    setIncome({
+      category_id: editIncome.category_id._id,
+      amount: editIncome.amount,
+      description: editIncome.description,
+      date: editIncome.date.split("T")[0],
+    });
+  };
+
+  const handleSaveIncome = async () => {
+    incomeId
+      ? handleUpdateIncome(incomeId, income)
+      : handleCreateIncome(income);
   };
 
   const handleCreateIncome = async () => {
-    await createIncome(newIncome);
+    await createIncome(income);
     fetchIncomes();
   };
 
   const handleUpdateIncome = async (id) => {
-    await updateIncome(id, newIncome);
+    await updateIncome(id, income);
     fetchIncomes();
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
@@ -52,24 +67,22 @@ const Form = ({ isOpen, onClose }) => {
             <IoClose className="h-6 w-6" />
           </button>
         </div>
-        <form onSubmit={handleCreateIncome}>
+        <form onSubmit={handleSaveIncome}>
           <div className="mb-4">
             <input
               type="text"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              value={newIncome.amount}
-              onChange={(e) =>
-                setNewIncome({ ...newIncome, amount: e.target.value })
-              }
+              value={income.amount}
+              onChange={(e) => setIncome({ ...income, amount: e.target.value })}
               placeholder="Amount"
             />
           </div>
           <div className="mb-4">
             <textarea
               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              value={newIncome.description}
+              value={income.description}
               onChange={(e) =>
-                setNewIncome({ ...newIncome, description: e.target.value })
+                setIncome({ ...income, description: e.target.value })
               }
               placeholder="Description"
             ></textarea>
@@ -78,17 +91,15 @@ const Form = ({ isOpen, onClose }) => {
             <input
               type="date"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              value={newIncome.income_date}
-              onChange={(e) =>
-                setNewIncome({ ...newIncome, income_date: e.target.value })
-              }
+              value={income.date}
+              onChange={(e) => setIncome({ ...income, date: e.target.value })}
             />
           </div>
           <div className="mb-4">
             <select
-              value={newIncome.category_id}
+              value={income.category_id}
               onChange={(e) =>
-                setNewIncome({ ...newIncome, category_id: e.target.value })
+                setIncome({ ...income, category_id: e.target.value })
               }
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
@@ -113,7 +124,7 @@ const Form = ({ isOpen, onClose }) => {
               type="submit"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mt-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
-              Add Income
+              {incomeId ? "Update" : "Add"} Income
             </button>
           </div>
         </form>

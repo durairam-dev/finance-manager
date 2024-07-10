@@ -62,7 +62,7 @@ const Dashboard = () => {
           <ul>
             {expenses.slice(0, 5).map((expense) => (
               <li key={expense._id} className="border-b py-2">
-                {expense.amount} - {expense.description} ({expense.expense_date}
+                {expense.amount} - {expense.description} ({expense.date}
                 )
               </li>
             ))}
@@ -73,7 +73,7 @@ const Dashboard = () => {
           <ul>
             {incomes.slice(0, 5).map((income) => (
               <li key={income._id} className="border-b py-2">
-                {income.amount} - {income.description} ({income.income_date})
+                {income.amount} - {income.description} ({income.date})
               </li>
             ))}
           </ul>

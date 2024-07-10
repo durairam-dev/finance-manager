@@ -2,17 +2,26 @@ import React, { useState, useEffect } from "react";
 import { getCategories, deleteCategory } from "../../api/apiEndpoint";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import Pagination from "../PaginationComponent";
 
 const CategoryList = ({ setCategoryId, onOpen }) => {
   const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const fetchCategories = async () => {
-    const response = await getCategories();
-    setCategories(response);
+  useEffect(() => {
+    fetchCategories(page);
+  }, [page]);
+
+  const fetchCategories = async (page) => {
+    const response = await getCategories(page, 2);
+    setCategories(response.categories);
+    setTotalPages(response.totalPages);
+  };
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
   };
 
   const handleEditCategory = async (id) => {
@@ -31,12 +40,12 @@ const CategoryList = ({ setCategoryId, onOpen }) => {
         {categories.map((category) => (
           <li
             key={category._id}
-            className={`flex flex-col lg:space-y-4 space-y-2  rounded-md shadow-md lg:p-4 p-2
+            className={`flex flex-col lg:space-y-4 space-y-2 rounded-md shadow-md lg:p-4 p-2
               ${category.type === "income" ? "bg-green-400" : "bg-red-400"}`}
           >
             <div className="w-full flex justify-between items-center">
               <span
-                className={`block bg-white rounded-md shadow-md px-2 py-1 capitalize 
+                className={`block bg-white rounded-md shadow-sm px-2 py-1 capitalize 
                   ${
                     category.type === "income"
                       ? "text-green-400"
@@ -74,6 +83,11 @@ const CategoryList = ({ setCategoryId, onOpen }) => {
           </li>
         ))}
       </ul>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };

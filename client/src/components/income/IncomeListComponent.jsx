@@ -1,45 +1,36 @@
-import React, { useState, useEffect } from "react";
-import {
-  getIncomes,
-  createIncome,
-  updateIncome,
-  deleteIncome,
-  getCategories,
-} from "../../api/apiEndpoint";
+import React, { useEffect, useState } from "react";
+import { deleteIncome, getIncomes } from "../../api/apiEndpoint";
+import { formatDate } from "../../utils/dateFormatUtils";
+import { groupByDate } from "../../utils/responseUtils";
 
-const IncomeList = () => {
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { LuIndianRupee } from "react-icons/lu";
+import Pagination from "../PaginationComponent";
+
+const IncomeList = ({ setIncomeId, onOpen }) => {
   const [incomes, setIncomes] = useState([]);
-  const [newIncome, setNewIncome] = useState({
-    category_id: "",
-    amount: "",
-    description: "",
-    income_date: "",
-  });
-  const [categories, setCategories] = useState([]); // State for categories
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    fetchIncomes();
-    fetchCategories(); // Fetch categories on component mount
-  }, []);
+    fetchIncomes(page);
+  }, [page]);
 
-  const fetchIncomes = async () => {
-    const response = await getIncomes();
-    setIncomes(response.data);
+  const fetchIncomes = async (page) => {
+    const response = await getIncomes(page, 10);
+    setIncomes(groupByDate(response.incomes));
+    setTotalPages(response.totalPages);
   };
 
-  const fetchCategories = async () => {
-    const response = await getCategories(); // Fetch categories from API
-    setCategories(response.data);
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
   };
 
-  const handleCreateIncome = async () => {
-    await createIncome(newIncome);
-    fetchIncomes();
-  };
-
-  const handleUpdateIncome = async (id) => {
-    await updateIncome(id, newIncome);
-    fetchIncomes();
+  const handleEditIncome = async (id) => {
+    setIncomeId(id);
+    onOpen();
   };
 
   const handleDeleteIncome = async (id) => {
@@ -49,32 +40,55 @@ const IncomeList = () => {
 
   return (
     <div className="p-4">
-      <ul>
-        {incomes.map((income) => (
-          <li
-            key={income._id}
-            className="flex justify-between items-center mb-2"
-          >
-            <span>
-              {income.amount} - {income.description} ({income.income_date})
-            </span>
-            <div>
-              <button
-                onClick={() => handleUpdateIncome(income._id)}
-                className="bg-yellow-400 p-2 mr-2"
-              >
-                Update
-              </button>
-              <button
-                onClick={() => handleDeleteIncome(income._id)}
-                className="bg-red-600 text-white p-2"
-              >
-                Delete
-              </button>
-            </div>
+      <ul className="flex flex-col space-y-2">
+        {Object.keys(incomes).map((date) => (
+          <li key={date}>
+            <h2 className="w-full text-md text-white font-semibold bg-slate-400 rounded-md shadow-md p-2">
+              {formatDate(date)}
+            </h2>
+            <ul className="grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 lg:gap-4 gap-2 mt-2">
+              {incomes[date].map((income) => (
+                <li
+                  key={income._id}
+                  className="flex flex-col lg:space-y-4 space-y-2 bg-amber-200 rounded-md shadow-md lg:p-4 p-2"
+                >
+                  <div className="w-full flex justify-between items-center">
+                    <span className="block bg-white rounded-md shadow-md px-2 py-1 capitalize">
+                      {income.category_id.name}
+                    </span>
+                    <ul className="flex space-x-2">
+                      <li
+                        onClick={() => handleEditIncome(income._id)}
+                        className="bg-white rounded-md shadow-md p-1"
+                      >
+                        <FaEdit />
+                      </li>
+                      <li
+                        onClick={() => handleDeleteIncome(income._id)}
+                        className="bg-white rounded-md shadow-md p-1"
+                      >
+                        <MdDelete />
+                      </li>
+                    </ul>
+                  </div>
+                  <p>{income.description}</p>
+                  <div className="flex justify-end items-center">
+                    <p className="flex items-center bg-white px-2 py-1 rounded-md">
+                      <LuIndianRupee className="inline" />
+                      {income.amount}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </li>
         ))}
       </ul>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
