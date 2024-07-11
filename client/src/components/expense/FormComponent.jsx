@@ -57,12 +57,10 @@ const Form = ({ onClose, expenseId }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-      <div className="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-6 w-full max-w-md">
+    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
+      <div className="bg-gray-200 dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-md">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-            Expenses
-          </h2>
+          <h2 className="text-xl font-bold dark:text-white">Expenses</h2>
           <button onClick={onClose} className="text-gray-200 hover:text-white">
             <IoClose className="h-6 w-6" />
           </button>

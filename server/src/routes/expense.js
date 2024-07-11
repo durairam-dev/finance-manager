@@ -16,7 +16,9 @@ router.post("/", async (req, res) => {
 // Get all expenses
 router.get("/all", async (req, res) => {
   try {
-    const expenses = await Expense.find().populate("category_id");
+    const expenses = await Expense.find()
+      .populate("category_id", "name")
+      .sort({ date: "desc" });
     res.status(200).json(expenses);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -29,7 +31,7 @@ router.get("/", async (req, res) => {
     page = 1,
     limit = 10,
     sortField = "date",
-    sortOrder = "asc",
+    sortOrder = "desc",
   } = req.query;
 
   try {

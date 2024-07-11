@@ -39,7 +39,7 @@ const IncomeList = ({ setIncomeId, onOpen }) => {
   };
 
   return (
-    <div className="p-4">
+    <div className="mt-2 lg:p-4 p-2 relative pb-20">
       <ul className="flex flex-col space-y-2">
         {Object.keys(incomes).map((date) => (
           <li key={date}>
@@ -50,30 +50,32 @@ const IncomeList = ({ setIncomeId, onOpen }) => {
               {incomes[date].map((income) => (
                 <li
                   key={income._id}
-                  className="flex flex-col lg:space-y-4 space-y-2 bg-amber-200 rounded-md shadow-md lg:p-4 p-2"
+                  className="flex flex-col lg:space-y-4 space-y-2 bg-amber-300 rounded-md shadow-md lg:p-4 p-2"
                 >
                   <div className="w-full flex justify-between items-center">
-                    <span className="block bg-white rounded-md shadow-md px-2 py-1 capitalize">
+                    <span className="block bg-white text-amber-300 rounded-md shadow px-2 py-1 capitalize">
                       {income.category_id.name}
                     </span>
                     <ul className="flex space-x-2">
                       <li
                         onClick={() => handleEditIncome(income._id)}
-                        className="bg-white rounded-md shadow-md p-1"
+                        className="bg-white text-amber-300 rounded-md shadow-md p-1"
                       >
                         <FaEdit />
                       </li>
                       <li
                         onClick={() => handleDeleteIncome(income._id)}
-                        className="bg-white rounded-md shadow-md p-1"
+                        className="bg-white text-amber-300 rounded-md shadow-md p-1"
                       >
                         <MdDelete />
                       </li>
                     </ul>
                   </div>
-                  <p className="px-2">{income.description}</p>
+                  <p className="px-2 font-medium dark:text-gray-700">
+                    {income.description}
+                  </p>
                   <div className="flex justify-end items-center">
-                    <p className="flex items-center bg-white px-2 py-1 rounded-md">
+                    <p className="flex items-center bg-white text-amber-300 px-2 py-1 rounded-md">
                       <LuIndianRupee className="inline" />
                       {income.amount}
                     </p>

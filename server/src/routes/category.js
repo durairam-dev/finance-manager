@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
 // Get all categories
 router.get("/all", async (req, res) => {
   try {
-    const categories = await Category.find();
+    const categories = await Category.find().sort({ created_at: "desc" });
     res.status(200).json(categories);
   } catch (err) {
     res.status(500).json({ error: err.message });

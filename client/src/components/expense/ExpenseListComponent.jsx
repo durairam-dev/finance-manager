@@ -39,7 +39,7 @@ const ExpenseList = ({ setExpenseId, onOpen }) => {
   };
 
   return (
-    <div className="p-4">
+    <div className="mt-2 lg:p-4 p-2 relative pb-20">
       <ul className="flex flex-col space-y-2">
         {Object.keys(expenses).map((date) => (
           <li key={date}>
@@ -50,30 +50,32 @@ const ExpenseList = ({ setExpenseId, onOpen }) => {
               {expenses[date].map((expense) => (
                 <li
                   key={expense._id}
-                  className="flex flex-col lg:space-y-4 space-y-2 bg-amber-200 rounded-md shadow-md lg:p-4 p-2"
+                  className="flex flex-col lg:space-y-4 space-y-2 bg-amber-300 rounded-md shadow-md lg:p-4 p-2"
                 >
                   <div className="w-full flex justify-between items-center">
-                    <span className="block bg-white rounded-md shadow-md px-2 py-1 capitalize">
+                    <span className="block bg-white text-amber-300 rounded-md shadow px-2 py-1 capitalize">
                       {expense.category_id.name}
                     </span>
                     <ul className="flex space-x-2">
                       <li
                         onClick={() => handleEditExpense(expense._id)}
-                        className="bg-white rounded-md shadow-md p-1"
+                        className="bg-white text-amber-300 rounded-md shadow-md p-1"
                       >
                         <FaEdit />
                       </li>
                       <li
                         onClick={() => handleDeleteExpense(expense._id)}
-                        className="bg-white rounded-md shadow-md p-1"
+                        className="bg-white text-amber-300 rounded-md shadow-md p-1"
                       >
                         <MdDelete />
                       </li>
                     </ul>
                   </div>
-                  <p className="px-2">{expense.description}</p>
+                  <p className="px-2 font-medium dark:text-gray-700">
+                    {expense.description}
+                  </p>
                   <div className="flex justify-end items-center">
-                    <p className="flex items-center bg-white px-2 py-1 rounded-md">
+                    <p className="flex items-center bg-white text-amber-300 px-2 py-1 rounded-md">
                       <LuIndianRupee className="inline" />
                       {expense.amount}
                     </p>
@@ -84,7 +86,7 @@ const ExpenseList = ({ setExpenseId, onOpen }) => {
           </li>
         ))}
       </ul>
-     {totalPages > 1 && (
+      {totalPages > 1 && (
         <Pagination
           currentPage={page}
           totalPages={totalPages}

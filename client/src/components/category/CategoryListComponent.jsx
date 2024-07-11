@@ -35,7 +35,7 @@ const CategoryList = ({ setCategoryId, onOpen }) => {
   };
 
   return (
-    <div className="lg:p-4 p-2">
+    <div className="mt-2 lg:p-4 p-2 relative pb-20">
       <ul className="grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 lg:gap-4 gap-2">
         {categories.map((category) => (
           <li
@@ -77,7 +77,7 @@ const CategoryList = ({ setCategoryId, onOpen }) => {
                 </li>
               </ul>
             </div>
-            <span className="block font-semibold text-white">
+            <span className="block font-semibold dark:text-white">
               {category.name}
             </span>
           </li>
