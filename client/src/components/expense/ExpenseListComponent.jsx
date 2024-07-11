@@ -19,7 +19,7 @@ const ExpenseList = ({ setExpenseId, onOpen }) => {
   }, [page]);
 
   const fetchExpenses = async (page) => {
-    const response = await getExpenses(page, 2);
+    const response = await getExpenses(page, 10);
     setExpenses(groupByDate(response.expenses));
     setTotalPages(response.totalPages);
   };
@@ -71,7 +71,7 @@ const ExpenseList = ({ setExpenseId, onOpen }) => {
                       </li>
                     </ul>
                   </div>
-                  <p>{expense.description}</p>
+                  <p className="px-2">{expense.description}</p>
                   <div className="flex justify-end items-center">
                     <p className="flex items-center bg-white px-2 py-1 rounded-md">
                       <LuIndianRupee className="inline" />
@@ -84,11 +84,13 @@ const ExpenseList = ({ setExpenseId, onOpen }) => {
           </li>
         ))}
       </ul>
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+     {totalPages > 1 && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };

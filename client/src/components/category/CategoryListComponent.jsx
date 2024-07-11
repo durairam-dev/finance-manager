@@ -15,7 +15,7 @@ const CategoryList = ({ setCategoryId, onOpen }) => {
   }, [page]);
 
   const fetchCategories = async (page) => {
-    const response = await getCategories(page, 2);
+    const response = await getCategories(page, 10);
     setCategories(response.categories);
     setTotalPages(response.totalPages);
   };
@@ -83,11 +83,13 @@ const CategoryList = ({ setCategoryId, onOpen }) => {
           </li>
         ))}
       </ul>
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };

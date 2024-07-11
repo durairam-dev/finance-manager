@@ -71,7 +71,7 @@ const IncomeList = ({ setIncomeId, onOpen }) => {
                       </li>
                     </ul>
                   </div>
-                  <p>{income.description}</p>
+                  <p className="px-2">{income.description}</p>
                   <div className="flex justify-end items-center">
                     <p className="flex items-center bg-white px-2 py-1 rounded-md">
                       <LuIndianRupee className="inline" />
@@ -84,11 +84,13 @@ const IncomeList = ({ setIncomeId, onOpen }) => {
           </li>
         ))}
       </ul>
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };

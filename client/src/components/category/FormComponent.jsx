@@ -41,7 +41,7 @@ const Modal = ({ onClose, categoryId }) => {
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             Category
           </h2>
-          <button onClick={onClose} className="text-gray-200 hover:text-white">
+          <button onClick={onClose} className="dark:text-gray-200 dark:hover:dark:text-white text-black text-gray-950 hover:text-black">
             <IoClose className="h-6 w-6" />
           </button>
         </div>

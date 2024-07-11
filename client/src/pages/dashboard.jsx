@@ -14,17 +14,17 @@ const Dashboard = () => {
 
   const fetchCategories = async () => {
     const response = await getCategories();
-    setCategories(response.data);
+    setCategories(response.categories);
   };
 
   const fetchExpenses = async () => {
     const response = await getExpenses();
-    setExpenses(response.data);
+    setExpenses(response.expenses);
   };
 
   const fetchIncomes = async () => {
     const response = await getIncomes();
-    setIncomes(response.data);
+    setIncomes(response.incomes);
   };
 
   const calculateTotal = (items) => {
@@ -62,8 +62,7 @@ const Dashboard = () => {
           <ul>
             {expenses.slice(0, 5).map((expense) => (
               <li key={expense._id} className="border-b py-2">
-                {expense.amount} - {expense.description} ({expense.date}
-                )
+                {expense.amount} - {expense.description} ({expense.date})
               </li>
             ))}
           </ul>
