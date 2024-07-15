@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Rest API for finance manager",
+  "description": "Rest API for personal finance manager",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
