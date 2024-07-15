@@ -1,2 +1,2 @@
-# finance-manager
+# personal-finance-manager
 Account your incomes and expenses
